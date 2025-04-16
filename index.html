@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture de Convoyage</title>
+</head>
+<body>
+    <div class="invoice-container" id="invoice">
+        <h1>FACTURE DE CONVOYAGE</h1>
+        
+        <!-- Informations de l'entreprise -->
+        <div class="company-info">
+            <h2 contenteditable="true">TRANSPORT DUPONT</h2>
+            <p><strong>Adresse :</strong> <span id="company-address" contenteditable="true">123 Rue des Transporteurs, 75000 Paris</span></p>
+            <p><strong>Téléphone :</strong> <span id="company-phone" contenteditable="true">01 23 45 67 89</span></p>
+            <p><strong>SIREN :</strong> <span id="company-siren" contenteditable="true">123 456 789</span></p>
+        </div>
+        
+        <!-- Informations du client -->
+        <div class="client-info">
+            <h2>CLIENT</h2>
+            <p><strong>Nom :</strong> <span id="client-name" contenteditable="true">Société XYZ</span></p>
+            <p><strong>Adresse :</strong> <span id="client-address" contenteditable="true">456 Avenue des Clients, 69000 Lyon</span></p>
+            <p><strong>Téléphone :</strong> <span id="client-phone" contenteditable="true">04 56 78 90 12</span></p>
+            <p><strong>SIREN :</strong> <span id="client-siren" contenteditable="true">987 654 321</span></p>
+        </div>
+        
+        <!-- Détails de la mission -->
+        <div class="mission-details">
+            <h3>DÉTAILS DE LA MISSION</h3>
+            <div>
+                <strong>Ville de départ :</strong> <span id="departure-city" contenteditable="true">Paris</span>
+            </div>
+            <div>
+                <strong>Ville d'arrivée :</strong> <span id="arrival-city" contenteditable="true">Lyon</span>
+            </div>
+            <div>
+                <strong>Description :</strong> <span id="mission-description" contenteditable="true">Convoyage de véhicule utilitaire - Modèle Renault Master</span>
+            </div>
+        </div>
+        
+        <!-- Détails de la facture -->
+        <div class="header">
+            <p><strong>N° Facture :</strong> <span id="invoice-number" contenteditable="true">FAC-2023-001</span></p>
+            <p><strong>Date :</strong> <span id="invoice-date" contenteditable="true">01/06/2023</span></p>
+        </div>
+        
+        <!-- Tableau des prestations -->
+        <table id="services">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Quantité</th>
+                    <th>Prix Unitaire (€)</th>
+                    <th>Total (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="service">
+                    <td contenteditable="true">Prestation de convoyage</td>
+                    <td contenteditable="true">1</td>
+                    <td contenteditable="true">500.00</td>
+                    <td class="total">500.00</td>
+                </tr>
+                <tr class="service">
+                    <td contenteditable="true">Frais kilométriques supplémentaires</td>
+                    <td contenteditable="true">50</td>
+                    <td contenteditable="true">0.50</td>
+                    <td class="total">25.00</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Totaux -->
+        <div class="totals">
+            <p>Total HT : <span id="subtotal">525.00</span> €</p>
+            <p>TVA (20%) : <span id="tax">105.00</span> €</p>
+            <p>Total TTC : <span id="total-ttc">630.00</span> €</p>
+        </div>
+        
+        <!-- Notes -->
+        <div class="notes">
+            <h3>NOTES</h3>
+            <p contenteditable="true">Merci pour votre confiance. Paiement à effectuer sous 30 jours par virement bancaire. Coordonnées bancaires disponibles sur demande.</p>
+        </div>
+    </div>
+    
+    <button class="btn-generate" onclick="generatePDF()">Générer le PDF</button>
+
+    <!-- Bibliothèques JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+</body>
+</html>

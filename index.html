@@ -3,94 +3,333 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facture de Convoyage</title>
+    <title>Facture Convoyage</title>
+    <style>
+        /* RESET CSS */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        /* STRUCTURE PRINCIPALE */
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        /* SECTIONS VISIBLES */
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        /* TABLEAU */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #f8f8f8;
+            font-weight: bold;
+        }
+        
+        /* BOUTONS */
+        button {
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            border-radius: 4px;
+        }
+        #add-row {
+            background: #4CAF50;
+            color: white;
+        }
+        #calculate-btn {
+            background: #2196F3;
+            color: white;
+        }
+        #generate-pdf {
+            display: block;
+            margin: 30px auto 0;
+            padding: 12px 25px;
+            background: #FF5722;
+            color: white;
+            font-size: 16px;
+        }
+        .remove-btn {
+            background: #f44336;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+        }
+        
+        /* CHAMPS EDITABLES */
+        [contenteditable="true"] {
+            border-bottom: 1px dashed #666;
+            min-width: 50px;
+            display: inline-block;
+            padding: 2px 4px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        /* TOTAUX */
+        .totals {
+            text-align: right;
+            margin-top: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .total-ttc {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: #d32f2f;
+        }
+
+        /* NOTES */
+        .notes-container {
+            min-height: 150px; /* Plus d'espace pour les notes */
+            padding: 15px;
+            border: 1px dashed #ccc;
+            margin-top: 15px;
+            background: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
     <div class="invoice-container" id="invoice">
-        <h1>FACTURE DE CONVOYAGE</h1>
-        
-        <!-- Informations de l'entreprise -->
-        <div class="company-info">
-            <h2 contenteditable="true">TRANSPORT DUPONT</h2>
+        <!-- ENTREPRISE -->
+        <div class="section">
+            <h2>FACTURÉ PAR</h2>
+            <p><strong>Société :</strong> <span id="company-name" contenteditable="true">TRANSPORT DUPONT</span></p>
             <p><strong>Adresse :</strong> <span id="company-address" contenteditable="true">123 Rue des Transporteurs, 75000 Paris</span></p>
+            <p><strong>SIRET :</strong> <span id="company-siret" contenteditable="true">123 456 789 00010</span></p>
             <p><strong>Téléphone :</strong> <span id="company-phone" contenteditable="true">01 23 45 67 89</span></p>
-            <p><strong>SIREN :</strong> <span id="company-siren" contenteditable="true">123 456 789</span></p>
+            <p><strong>Email :</strong> <span id="company-email" contenteditable="true">contact@transportdupont.fr</span></p>
         </div>
-        
-        <!-- Informations du client -->
-        <div class="client-info">
-            <h2>CLIENT</h2>
-            <p><strong>Nom :</strong> <span id="client-name" contenteditable="true">Société XYZ</span></p>
-            <p><strong>Adresse :</strong> <span id="client-address" contenteditable="true">456 Avenue des Clients, 69000 Lyon</span></p>
-            <p><strong>Téléphone :</strong> <span id="client-phone" contenteditable="true">04 56 78 90 12</span></p>
-            <p><strong>SIREN :</strong> <span id="client-siren" contenteditable="true">987 654 321</span></p>
+
+        <!-- CLIENT (MODIFIÉ) -->
+        <div class="section">
+            <h2>FACTURÉ À</h2>
+            <p><strong>Client :</strong> <span id="client-name" contenteditable="true">AUTO PERTI CONVOYAGE</span></p>
+            <p><strong>Adresse :</strong> <span id="client-address" contenteditable="true">XXXXXX</span></p>
+            <p><strong>SIRET :</strong> <span id="client-siret" contenteditable="true">953 699 667 00010</span></p>
+            <!-- AJOUT DES COORDONNÉES CLIENT -->
+            <p><strong>Téléphone :</strong> <span id="client-phone" contenteditable="true">06 12 34 56 78</span></p>
+            <p><strong>Email :</strong> <span id="client-email" contenteditable="true">client@entreprise.com</span></p>
         </div>
-        
-        <!-- Détails de la mission -->
-        <div class="mission-details">
-            <h3>DÉTAILS DE LA MISSION</h3>
-            <div>
-                <strong>Ville de départ :</strong> <span id="departure-city" contenteditable="true">Paris</span>
+
+        <!-- DETAILS FACTURE -->
+        <div class="section">
+            <h2>DÉTAILS DU CONVOYAGE</h2>
+            <div style="display: flex; gap: 50px; flex-wrap: wrap;">
+                <div>
+                    <p><strong>N° Facture :</strong> <span id="invoice-number" contenteditable="true">FAC-2024-001</span></p>
+                    <p><strong>Date :</strong> <span id="invoice-date" contenteditable="true">15/06/2024</span></p>
+                </div>
+                <div>
+                    <p><strong>Départ :</strong> <span id="departure-city" contenteditable="true">Reims</span></p>
+                    <p><strong>Arrivée :</strong> <span id="arrival-city" contenteditable="true">Saint-Xandre</span></p>
+                </div>
             </div>
-            <div>
-                <strong>Ville d'arrivée :</strong> <span id="arrival-city" contenteditable="true">Lyon</span>
-            </div>
-            <div>
-                <strong>Description :</strong> <span id="mission-description" contenteditable="true">Convoyage de véhicule utilitaire - Modèle Renault Master</span>
-            </div>
         </div>
-        
-        <!-- Détails de la facture -->
-        <div class="header">
-            <p><strong>N° Facture :</strong> <span id="invoice-number" contenteditable="true">FAC-2023-001</span></p>
-            <p><strong>Date :</strong> <span id="invoice-date" contenteditable="true">01/06/2023</span></p>
-        </div>
-        
-        <!-- Tableau des prestations -->
+
+        <!-- TABLEAU -->
         <table id="services">
             <thead>
                 <tr>
                     <th>Description</th>
-                    <th>Quantité</th>
-                    <th>Prix Unitaire (€)</th>
-                    <th>Total (€)</th>
+                    <th width="100">Quantité</th>
+                    <th width="120">Prix Unitaire</th>
+                    <th width="100">TVA</th>
+                    <th width="120">Total HT</th>
+                    <th width="40"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="service">
-                    <td contenteditable="true">Prestation de convoyage</td>
-                    <td contenteditable="true">1</td>
-                    <td contenteditable="true">500.00</td>
-                    <td class="total">500.00</td>
-                </tr>
-                <tr class="service">
-                    <td contenteditable="true">Frais kilométriques supplémentaires</td>
-                    <td contenteditable="true">50</td>
-                    <td contenteditable="true">0.50</td>
-                    <td class="total">25.00</td>
+                <tr class="service-row">
+                    <td contenteditable="true">Convoyage véhicule utilitaire</td>
+                    <td><input type="number" class="qty" value="1" min="1"></td>
+                    <td><input type="number" class="price" value="440.00" min="0" step="0.01"></td>
+                    <td>
+                        <select class="tva-select">
+                            <option value="20">20%</option>
+                            <option value="10">10%</option>
+                            <option value="5.5">5.5%</option>
+                            <option value="0">0%</option>
+                        </select>
+                    </td>
+                    <td class="total">440.00</td>
+                    <td><button class="remove-btn">×</button></td>
                 </tr>
             </tbody>
         </table>
-        
-        <!-- Totaux -->
+
+        <button id="add-row">+ Ajouter une ligne</button>
+        <button id="calculate-btn">Calculer les totaux</button>
+
+        <!-- TOTAUX -->
         <div class="totals">
-            <p>Total HT : <span id="subtotal">525.00</span> €</p>
-            <p>TVA (20%) : <span id="tax">105.00</span> €</p>
-            <p>Total TTC : <span id="total-ttc">630.00</span> €</p>
+            <p>Total HT : <span id="subtotal">440.00</span> €</p>
+            <p>TVA : <span id="tax-amount">88.00</span> € (<span id="tax-rate">20</span>%)</p>
+            <p class="total-ttc">Total TTC : <span id="total-ttc">528.00</span> €</p>
         </div>
-        
-        <!-- Notes -->
-        <div class="notes">
-            <h3>NOTES</h3>
-            <p contenteditable="true">Merci pour votre confiance. Paiement à effectuer sous 30 jours par virement bancaire. Coordonnées bancaires disponibles sur demande.</p>
+
+        <!-- NOTES (MODIFIÉ) -->
+        <div class="section">
+            <h2>NOTES</h2>
+            <div class="notes-container" id="notes" contenteditable="true">
+                <p><strong>Conditions de paiement :</strong> Paiement sous 30 jours par virement bancaire</p>
+                <p><strong>Coordonnées bancaires :</strong></p>
+                <p>XXXX</p>
+                <p>XXXXX </p>
+                <p><strong>Informations complémentaires :</strong></p>
+                <p>En cas de retard de paiement, des pénalités de 10% seront appliquées conformément à la loi.</p>
+            </div>
         </div>
     </div>
-    
-    <button class="btn-generate" onclick="generatePDF()">Générer le PDF</button>
 
-    <!-- Bibliothèques JS -->
+    <button id="generate-pdf">Générer PDF</button>
+
+    <!-- SCRIPTS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Variables pour stocker les styles originaux
+        let originalButtonStyles = [];
+        let originalInvoiceStyle = {};
+
+        // Fonction pour ajouter une ligne
+        document.getElementById('add-row').addEventListener('click', function() {
+            const newRow = document.createElement('tr');
+            newRow.className = 'service-row';
+            newRow.innerHTML = `
+                <td contenteditable="true">Nouveau service</td>
+                <td><input type="number" class="qty" value="1" min="1"></td>
+                <td><input type="number" class="price" value="0.00" min="0" step="0.01"></td>
+                <td>
+                    <select class="tva-select">
+                        <option value="20">20%</option>
+                        <option value="10">10%</option>
+                        <option value="5.5">5.5%</option>
+                        <option value="0">0%</option>
+                    </select>
+                </td>
+                <td class="total">0.00</td>
+                <td><button class="remove-btn">×</button></td>
+            `;
+            document.querySelector('#services tbody').appendChild(newRow);
+            
+            // Ajouter l'événement de suppression
+            newRow.querySelector('.remove-btn').addEventListener('click', function() {
+                this.closest('tr').remove();
+            });
+        });
+
+        // Fonction pour calculer les totaux
+        document.getElementById('calculate-btn').addEventListener('click', function() {
+            let subtotal = 0;
+            document.querySelectorAll('.service-row').forEach(row => {
+                const qty = parseFloat(row.querySelector('.qty').value) || 0;
+                const price = parseFloat(row.querySelector('.price').value) || 0;
+                const total = qty * price;
+                row.querySelector('.total').textContent = total.toFixed(2);
+                subtotal += total;
+            });
+
+            const tvaRate = parseFloat(document.querySelector('.tva-select').value) || 0;
+            const tax = subtotal * (tvaRate / 100);
+            const totalTTC = subtotal + tax;
+
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+            document.getElementById('tax-amount').textContent = tax.toFixed(2);
+            document.getElementById('total-ttc').textContent = totalTTC.toFixed(2);
+        });
+
+        // Fonction pour générer le PDF
+        document.getElementById('generate-pdf').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const btn = this;
+            
+            // Sauvegarder les styles originaux des boutons
+            originalButtonStyles = [];
+            document.querySelectorAll('button').forEach(button => {
+                originalButtonStyles.push({
+                    element: button,
+                    display: button.style.display
+                });
+                button.style.display = 'none';
+            });
+
+            // Sauvegarder le style original de la facture
+            const invoice = document.getElementById('invoice');
+            originalInvoiceStyle = {
+                padding: invoice.style.padding,
+                margin: invoice.style.margin
+            };
+            invoice.style.padding = '10px';
+            invoice.style.margin = '0';
+
+            // Générer le PDF
+            html2canvas(invoice).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 190;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                pdf.save('facture-convoyage.pdf');
+            }).catch(error => {
+                console.error("Erreur :", error);
+            }).finally(() => {
+                // Restaurer les styles originaux
+                originalButtonStyles.forEach(button => {
+                    button.element.style.display = button.display;
+                });
+                
+                const invoice = document.getElementById('invoice');
+                invoice.style.padding = originalInvoiceStyle.padding;
+                invoice.style.margin = originalInvoiceStyle.margin;
+                
+                btn.textContent = "Générer PDF";
+            });
+        });
+
+        // Initialiser les boutons de suppression existants
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('tr').remove();
+            });
+        });
+    });
+    </script>
 </body>
 </html>
